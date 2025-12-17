@@ -7,7 +7,7 @@ namespace Luny.Godot
     /// Ultra-thin Godot adapter: auto-initializes and forwards lifecycle to EngineLifecycleDispatcher.
     /// </summary>
     /// <remarks>
-    /// Gets auto-instantiated through autoload, added via plugin.gd.
+    /// Gets instantiated as autoload singleton, automatically added by plugin.gd.
     /// </remarks>
     internal sealed partial class GodotLifecycleAdapter : Node
     {

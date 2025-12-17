@@ -15,13 +15,25 @@ namespace Luny.Godot
 
         private IEngineLifecycleDispatcher _dispatcher;
 
-        private GodotLifecycleAdapter()
+        private static void EnsureSingleInstance(Node current)
         {
             if (_instance != null)
             {
-                Throw.LifecycleAdapterSingletonDuplicationException(nameof(GodotLifecycleAdapter),
-                    _instance.Name, unchecked((Int64)_instance.GetInstanceId()), Name, unchecked((Int64)GetInstanceId()));
+                Throw.LifecycleAdapterSingletonDuplicationException(nameof(GodotLifecycleAdapter), _instance.Name,
+                    unchecked((Int64)_instance.GetInstanceId()), current.Name, (Int64)current.GetInstanceId());
             }
+        }
+
+        // Instantiated automatically via Globals/Autoload
+        // If it doesn't instantiate, check if LunyScript plugin is enabled.
+        private GodotLifecycleAdapter() => Initialize();
+
+        private void Initialize()
+        {
+            // Logging comes first, we don't want to miss anything
+            LunyLogger.SetLogger(new GodotLogger());
+
+            EnsureSingleInstance(this);
 
             _instance = this;
             _dispatcher = EngineLifecycleDispatcher.Instance;
@@ -66,18 +78,18 @@ namespace Luny.Godot
 
             try
             {
-                Log.Info("[Luny] Shutting down...");
+                LunyLogger.LogInfo("[Luny] Shutting down...");
                 _dispatcher?.OnShutdown();
             }
             catch (Exception ex)
             {
-                Log.Exception(ex);
+                LunyLogger.LogException(ex);
             }
             finally
             {
                 _dispatcher = null;
                 _instance = null;
-                Log.Info("[Luny] Shutdown complete.");
+                LunyLogger.LogInfo("[Luny] Shutdown complete.");
             }
         }
     }

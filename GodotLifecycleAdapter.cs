@@ -60,7 +60,7 @@ namespace Luny.Godot
         public override void _Notification(Int32 what)
         {
             if (what != NotificationProcess && what != NotificationPhysicsProcess)
-                GD.Print($"GodotLifecycleAdapter ({GetInstanceId()}) _Notification: {GodotHelper.ToNotificationString(what)}");
+                LunyLogger.LogInfo($"_Notification: {GodotHelper.ToNotificationString(what)}", this);
 
             switch ((Int64)what)
             {
@@ -78,7 +78,7 @@ namespace Luny.Godot
 
             try
             {
-                LunyLogger.LogInfo("[Luny] Shutting down...");
+                LunyLogger.LogInfo("Shutting down...", this);
                 _dispatcher?.OnShutdown();
             }
             catch (Exception ex)
@@ -89,7 +89,7 @@ namespace Luny.Godot
             {
                 _dispatcher = null;
                 _instance = null;
-                LunyLogger.LogInfo("[Luny] Shutdown complete.");
+                LunyLogger.LogInfo("Shutdown complete.", this);
             }
         }
     }

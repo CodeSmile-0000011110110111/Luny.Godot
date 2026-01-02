@@ -12,9 +12,9 @@ namespace Luny.Godot
     /// <remarks>
     /// Gets instantiated as autoload singleton, automatically added by plugin.gd.
     /// </remarks>
-    internal sealed partial class GodotLifecycleAdapter : Node
+    internal sealed partial class LunyEngineGodotAdapter : Node
     {
-        private static GodotLifecycleAdapter _instance;
+        private static LunyEngineGodotAdapter _instance;
 
         private ILunyEngine _lunyEngine;
 
@@ -22,14 +22,14 @@ namespace Luny.Godot
         {
             if (_instance != null)
             {
-                LunyThrow.LifecycleAdapterSingletonDuplicationException(nameof(GodotLifecycleAdapter), _instance.Name,
+                LunyThrow.EngineAdapterSingletonDuplicationException(nameof(LunyEngineGodotAdapter), _instance.Name,
                     unchecked((Int64)_instance.GetInstanceId()), current.Name, (Int64)current.GetInstanceId());
             }
         }
 
         // Instantiated automatically via Globals/Autoload
         // If it doesn't instantiate, check if LunyScript plugin is enabled.
-        private GodotLifecycleAdapter() => CallDeferred(nameof(Initialize));
+        private LunyEngineGodotAdapter() => CallDeferred(nameof(Initialize));
 
         private void Initialize()
         {
@@ -57,7 +57,7 @@ namespace Luny.Godot
             if (_instance != null)
             {
                 Shutdown();
-                LunyThrow.LifecycleAdapterPrematurelyRemovedException(nameof(GodotLifecycleAdapter));
+                LunyThrow.EngineAdapterPrematurelyRemovedException(nameof(LunyEngineGodotAdapter));
             }
         }
 

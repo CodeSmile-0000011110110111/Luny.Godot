@@ -7,7 +7,7 @@ namespace Luny.Godot.Services
 	/// <summary>
 	/// Godot implementation of application control provider.
 	/// </summary>
-	public sealed class GodotApplicationService : IApplicationService
+	public sealed class GodotApplicationService : ApplicationServiceBase, IApplicationService
 	{
 		public Boolean IsEditor => Engine.IsEditorHint();
 

@@ -11,7 +11,7 @@ namespace Luny.Godot.Services
 	/// <summary>
 	/// Godot implementation of scene information provider.
 	/// </summary>
-	public sealed class GodotSceneService : ISceneService
+	public sealed class GodotSceneService : SceneServiceBase, ISceneService
 	{
 		public String CurrentSceneName
 		{

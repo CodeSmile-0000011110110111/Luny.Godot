@@ -7,7 +7,7 @@ namespace Luny.Godot.Services
 	/// <summary>
 	/// Godot implementation of Debug provider.
 	/// </summary>
-	public sealed class GodotDebugService : IDebugService
+	public sealed class GodotDebugService : DebugServiceBase, IDebugService
 	{
 		public void LogInfo(String message) => GD.Print(message);
 

@@ -11,10 +11,10 @@ namespace Luny.Godot.Engine
 	/// <remarks>
 	/// Gets instantiated as autoload singleton, automatically added by plugin.gd.
 	/// </remarks>
-	internal sealed partial class LunyEngineGodotAdapter : Node, IEngineAdapter
+	internal sealed partial class LunyEngineGodotAdapter : Node, ILunyEngineAdapter
 	{
 		// intentionally remains private - user code must use LunyEngine.Instance!
-		private static IEngineAdapter s_Instance;
+		private static ILunyEngineAdapter s_Instance;
 
 		// hold on to LunyEngine reference (not a Node type)
 		private ILunyEngine _lunyEngine;
@@ -29,14 +29,14 @@ namespace Luny.Godot.Engine
 			LunyLogger.Logger = new GodotLogger();
 			LunyLogger.LogInfo("Initializing...", typeof(LunyEngineGodotAdapter));
 
-			s_Instance = IEngineAdapter.ValidateAdapterSingletonInstance(s_Instance, this);
+			s_Instance = ILunyEngineAdapter.ValidateAdapterSingletonInstance(s_Instance, this);
 			_lunyEngine = LunyEngine.CreateInstance(this);
 		}
 
 		public override void _Ready() // => OnStartup()
 		{
-			IEngineAdapter.AssertNotNull(s_Instance);
-			IEngineAdapter.AssertLunyEngineNotNull(_lunyEngine);
+			ILunyEngineAdapter.AssertNotNull(s_Instance);
+			ILunyEngineAdapter.AssertLunyEngineNotNull(_lunyEngine);
 
 			_lunyEngine?.OnStartup();
 		}
@@ -63,7 +63,7 @@ namespace Luny.Godot.Engine
 		public override void _ExitTree()
 		{
 			// we should not exit tree with an existing instance (indicates manual removal)
-			IEngineAdapter.AssertNotPrematurelyRemoved(s_Instance, _lunyEngine);
+			ILunyEngineAdapter.AssertNotPrematurelyRemoved(s_Instance, _lunyEngine);
 			Shutdown();
 		}
 
@@ -76,7 +76,7 @@ namespace Luny.Godot.Engine
 
 			try
 			{
-				IEngineAdapter.ShutdownLunyEngine(s_Instance, _lunyEngine);
+				ILunyEngineAdapter.ShutdownLunyEngine(s_Instance, _lunyEngine);
 			}
 			catch (Exception ex)
 			{
@@ -84,7 +84,7 @@ namespace Luny.Godot.Engine
 			}
 			finally
 			{
-				IEngineAdapter.ShutdownComplete(s_Instance);
+				ILunyEngineAdapter.ShutdownComplete(s_Instance);
 
 				_lunyEngine = null;
 				s_Instance = null;

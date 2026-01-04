@@ -1,4 +1,5 @@
 using Luny.Engine.Bridge;
+using Luny.Engine.Identity;
 using Luny.Exceptions;
 using System;
 using Native = Godot;
@@ -21,7 +22,7 @@ namespace Luny.Godot.Engine.Bridge
 		/// Gets the wrapped Godot Node.
 		/// </summary>
 		public Native.Node Node => _node;
-		public override NativeID NativeID => _nativeID;
+		public override LunyNativeObjectID NativeObjectID => _nativeID;
 		public override String Name
 		{
 			get => IsValid ? _node.Name : _name;

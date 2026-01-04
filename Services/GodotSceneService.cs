@@ -1,10 +1,10 @@
-using Godot;
+using Luny.Engine.Bridge;
+using Luny.Engine.Services;
 using Luny.Godot.Proxies;
-using Luny.Proxies;
-using Luny.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Native = Godot;
 
 namespace Luny.Godot.Services
 {
@@ -17,7 +17,7 @@ namespace Luny.Godot.Services
 		{
 			get
 			{
-				var tree = (SceneTree)Engine.GetMainLoop();
+				var tree = (Native.SceneTree)Native.Engine.GetMainLoop();
 				var currentScene = tree?.CurrentScene;
 				return currentScene?.Name ?? Path.GetFileNameWithoutExtension(currentScene?.SceneFilePath) ?? String.Empty;
 			}
@@ -25,7 +25,7 @@ namespace Luny.Godot.Services
 
 		public IReadOnlyList<ILunyObject> GetAllObjects()
 		{
-			var tree = (SceneTree)Engine.GetMainLoop();
+			var tree = (Native.SceneTree)Native.Engine.GetMainLoop();
 			var currentScene = tree?.CurrentScene;
 
 			if (currentScene == null)
@@ -34,7 +34,7 @@ namespace Luny.Godot.Services
 			var allObjects = new List<ILunyObject>();
 
 			// Add all nodes recursively starting from root
-			void AddNodeAndChildren(Node node)
+			void AddNodeAndChildren(Native.Node node)
 			{
 				allObjects.Add(new GodotNode(node));
 
@@ -52,14 +52,14 @@ namespace Luny.Godot.Services
 			if (String.IsNullOrEmpty(name))
 				return null;
 
-			var tree = (SceneTree)Engine.GetMainLoop();
+			var tree = (Native.SceneTree)Native.Engine.GetMainLoop();
 			var currentScene = tree?.CurrentScene;
 
 			if (currentScene == null)
 				return null;
 
 			// Search recursively through scene hierarchy
-			Node FindNodeRecursive(Node node)
+			Native.Node FindNodeRecursive(Native.Node node)
 			{
 				if (node.Name == name)
 					return node;

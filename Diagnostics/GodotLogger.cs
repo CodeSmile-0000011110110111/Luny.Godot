@@ -1,5 +1,4 @@
 using Godot;
-using Luny.Diagnostics;
 using System;
 
 namespace Luny.Godot.Diagnostics

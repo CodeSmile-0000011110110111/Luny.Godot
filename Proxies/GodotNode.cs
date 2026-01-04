@@ -1,8 +1,7 @@
-using Godot;
+using Luny.Engine.Bridge;
 using Luny.Exceptions;
-using Luny.Proxies;
 using System;
-using SystemObject = System.Object;
+using Native = Godot;
 
 namespace Luny.Godot.Proxies
 {
@@ -12,16 +11,16 @@ namespace Luny.Godot.Proxies
 	public sealed class GodotNode : LunyObject
 	{
 		private readonly UInt64 _nativeID;
-		private Node _node;
+		private Native.Node _node;
 		private String _name;
 		private Boolean _isDestroyed;
 		private Boolean _isEnabled;
-		private Node.ProcessModeEnum _initialProcessMode;
+		private Native.Node.ProcessModeEnum _initialProcessMode;
 
 		/// <summary>
 		/// Gets the wrapped Godot Node.
 		/// </summary>
-		public Node Node => _node;
+		public Native.Node Node => _node;
 		public override NativeID NativeID => _nativeID;
 		public override String Name
 		{
@@ -32,7 +31,7 @@ namespace Luny.Godot.Proxies
 					_node.Name = _name = value;
 			}
 		}
-		public override Boolean IsValid => !_isDestroyed && _node != null && GodotObject.IsInstanceValid(_node) && _node.IsInsideTree();
+		public override Boolean IsValid => !_isDestroyed && _node != null && Native.GodotObject.IsInstanceValid(_node) && _node.IsInsideTree();
 		public override Boolean IsEnabled
 		{
 			get => IsValid && _isEnabled;
@@ -47,33 +46,30 @@ namespace Luny.Godot.Proxies
 				var isProcessModeDisabled = IsProcessModeDisabled(_node);
 				if (isProcessModeDisabled && _isEnabled)
 				{
-					_node.ProcessMode = _isEnabled ? _initialProcessMode : Node.ProcessModeEnum.Disabled;
+					_node.ProcessMode = _isEnabled ? _initialProcessMode : Native.Node.ProcessModeEnum.Disabled;
 					SetNodeVisible(_node, _isEnabled);
 				}
 
-				if (_isEnabled)
-					OnEnable?.Invoke();
-				else
-					OnDisable?.Invoke();
+				InvokeOnEnableOrOnDisable(_isEnabled);
 			}
 		}
 
-		private static Boolean IsProcessModeDisabled(Node node) => node?.ProcessMode == Node.ProcessModeEnum.Disabled;
+		private static Boolean IsProcessModeDisabled(Native.Node node) => node?.ProcessMode == Native.Node.ProcessModeEnum.Disabled;
 
-		private static void SetNodeVisible(Node node, Boolean visible)
+		private static void SetNodeVisible(Native.Node node, Boolean visible)
 		{
 			if (node == null)
 				return;
 
 			switch (node)
 			{
-				case CanvasItem ci when ci.Visible != visible:
+				case Native.CanvasItem ci when ci.Visible != visible:
 					ci.Visible = visible;
 					break;
-				case Node3D n3d when n3d.Visible != visible:
+				case Native.Node3D n3d when n3d.Visible != visible:
 					n3d.Visible = visible;
 					break;
-				case CanvasLayer cl when cl.Visible != visible:
+				case Native.CanvasLayer cl when cl.Visible != visible:
 					cl.Visible = visible;
 					break;
 				default:
@@ -81,7 +77,8 @@ namespace Luny.Godot.Proxies
 			}
 		}
 
-		public GodotNode(Node node)
+		public GodotNode(Native.Node node)
+			: base(node)
 		{
 			if (node == null)
 				throw new ArgumentNullException(nameof(node), $"{nameof(GodotNode)} {nameof(Node)} reference must not be null.");
@@ -97,15 +94,13 @@ namespace Luny.Godot.Proxies
 			_isEnabled = !IsProcessModeDisabled(_node);
 		}
 
-		public override SystemObject GetNativeObject() => _node;
-
 		public override void Destroy()
 		{
 			if (!IsValid)
 				return;
 
-			IsEnabled = false; // triggers OnDisable
-			OnDestroy?.Invoke();
+			IsEnabled = false; // triggers OnDisable if enabled
+			InvokeOnDestroy();
 			_isDestroyed = true; // Mark as destroyed (native destruction happens later)
 		}
 

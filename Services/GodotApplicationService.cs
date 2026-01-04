@@ -1,6 +1,6 @@
-using Godot;
-using Luny.Services;
+using Luny.Engine.Services;
 using System;
+using Native = Godot;
 
 namespace Luny.Godot.Services
 {
@@ -9,15 +9,15 @@ namespace Luny.Godot.Services
 	/// </summary>
 	public sealed class GodotApplicationService : ApplicationServiceBase, IApplicationService
 	{
-		public Boolean IsEditor => Engine.IsEditorHint();
+		public Boolean IsEditor => Native.Engine.IsEditorHint();
 
-		public Boolean IsPlaying => !Engine.IsEditorHint();
+		public Boolean IsPlaying => !Native.Engine.IsEditorHint();
 
 		public void Quit(Int32 exitCode = 0)
 		{
-			var tree = (SceneTree)Engine.GetMainLoop();
+			var tree = (Native.SceneTree)Native.Engine.GetMainLoop();
 			// play nice since Godot doesn't post the close request notification by itself
-			tree.Root.PropagateNotification((int)Node.NotificationWMCloseRequest);
+			tree.Root.PropagateNotification((Int32)Native.Node.NotificationWMCloseRequest);
 			// prefer deferred call - we don't know when and where user may call it
 			tree.CallDeferred("quit", exitCode);
 		}

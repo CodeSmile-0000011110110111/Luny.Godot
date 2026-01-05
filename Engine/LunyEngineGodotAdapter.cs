@@ -35,8 +35,8 @@ namespace Luny.Godot.Engine
 
 		public override void _Ready() // => OnStartup()
 		{
-			ILunyEngineNativeAdapter.AssertNotNull(s_Instance);
-			ILunyEngineNativeAdapter.AssertLunyEngineNotNull(_lunyEngine);
+			ILunyEngineNativeAdapter.ThrowIfAdapterNull(s_Instance);
+			ILunyEngineNativeAdapter.ThrowIfLunyEngineNull(_lunyEngine);
 
 			_lunyEngine?.OnEngineStartup();
 		}
@@ -63,7 +63,7 @@ namespace Luny.Godot.Engine
 		public override void _ExitTree()
 		{
 			// we should not exit tree with an existing instance (indicates manual removal)
-			ILunyEngineNativeAdapter.AssertNotPrematurelyRemoved(s_Instance, _lunyEngine);
+			ILunyEngineNativeAdapter.ThrowIfPrematurelyRemoved(s_Instance, _lunyEngine);
 			Shutdown();
 		}
 
@@ -76,7 +76,7 @@ namespace Luny.Godot.Engine
 
 			try
 			{
-				ILunyEngineNativeAdapter.ShutdownLunyEngine(s_Instance, _lunyEngine);
+				ILunyEngineNativeAdapter.Shutdown(s_Instance, _lunyEngine);
 			}
 			catch (Exception ex)
 			{

@@ -12,6 +12,7 @@ namespace Luny.Godot.Engine.Bridge
 	{
 		private Native.Node.ProcessModeEnum _processModeWhenEnabled;
 		private Native.Node Node => Cast<Native.Node>();
+
 		private static Boolean IsNodeVisible(Native.Node node) => node switch
 		{
 			Native.Node3D n3d => n3d.Visible,
@@ -19,6 +20,7 @@ namespace Luny.Godot.Engine.Bridge
 			Native.CanvasLayer cl => cl.Visible,
 			var _ => false,
 		};
+
 		private static void SetNodeVisible(Native.Node node, Boolean visible) => _ = node switch
 		{
 			Native.Node3D n3d => n3d.Visible = visible,
@@ -26,20 +28,24 @@ namespace Luny.Godot.Engine.Bridge
 			Native.CanvasLayer cl => cl.Visible = visible,
 			var _ => false,
 		};
+
 		private static void SetNodeProcessingAndVisibleState(Native.Node node, Native.Node.ProcessModeEnum processMode)
 		{
 			node.ProcessMode = processMode;
 			SetNodeVisible(node, processMode != Native.Node.ProcessModeEnum.Disabled);
 		}
+
 		public GodotNode(Native.Node node)
 			: base(node, (Int64)node.GetInstanceId(), node.ProcessMode != Native.Node.ProcessModeEnum.Disabled, IsNodeVisible(node)) =>
 			SetProcessModeWhenEnabled(node);
+
 		// if a node starts "Disabled" we set its process mode to "Inherit" when enabling it,
 		// otherwise a node starting "Disabled" would be .. hold your breath .. unenableable! :)
 		private void SetProcessModeWhenEnabled(Native.Node node) => _processModeWhenEnabled =
 			node.ProcessMode == Native.Node.ProcessModeEnum.Disabled
 				? Native.Node.ProcessModeEnum.Inherit
 				: node.ProcessMode;
+
 		protected override void DestroyNativeObject() => Node?.QueueFree();
 		protected override Boolean IsNativeObjectValid() => Node is {} node && Native.GodotObject.IsInstanceValid(node) && node.IsInsideTree();
 		protected override String GetNativeObjectName() => Node.Name;

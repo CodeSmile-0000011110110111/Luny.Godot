@@ -1,6 +1,5 @@
 using Godot;
 using Luny.Engine;
-using Luny.Godot.Engine.Services;
 using System;
 
 namespace Luny.Godot.Engine
@@ -43,8 +42,7 @@ namespace Luny.Godot.Engine
 			_lunyEngine?.OnEngineStartup();
 		}
 
-		public override void _PhysicsProcess(Double delta) =>
-			_lunyEngine?.OnEngineFixedStep(delta); // => OnFixedStep()
+		public override void _PhysicsProcess(Double delta) => _lunyEngine?.OnEngineFixedStep(delta); // => OnFixedStep()
 
 		public override void _Process(Double delta) // => OnUpdate() + OnLateUpdate()
 		{

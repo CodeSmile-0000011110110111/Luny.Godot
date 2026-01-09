@@ -21,9 +21,5 @@ namespace Luny.Godot.Engine.Services
 			// prefer deferred call - we don't know when and where user may call it
 			tree.CallDeferred("quit", exitCode);
 		}
-
-		protected override void OnServiceInitialize() {}
-		protected override void OnServiceStartup() {}
-		protected override void OnServiceShutdown() {}
 	}
 }

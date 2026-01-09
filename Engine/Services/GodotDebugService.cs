@@ -16,8 +16,5 @@ namespace Luny.Godot.Engine.Services
 		public void LogError(String message) => GD.PushError(message);
 
 		public void LogException(Exception exception) => GD.PushError(exception);
-		protected override void OnServiceInitialize() {}
-		protected override void OnServiceStartup() {}
-		protected override void OnServiceShutdown() {}
 	}
 }

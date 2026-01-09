@@ -14,7 +14,6 @@ namespace Luny.Godot.Engine.Services
 	public sealed class GodotSceneService : LunySceneServiceBase, ILunySceneService
 	{
 		[NotNull] private static Native.SceneTree SceneTree { get; set; }
-
 		public void ReloadScene() => throw new NotImplementedException(nameof(ReloadScene));
 
 		public IReadOnlyList<ILunyObject> GetAllObjects()
@@ -92,7 +91,6 @@ namespace Luny.Godot.Engine.Services
 			// Disconnect signals
 			SceneTree.NodeAdded -= OnNativeSceneLoaded;
 			SceneTree.NodeRemoved -= OnNativeSceneUnloaded;
-
 			CurrentScene = null;
 			SceneTree = null;
 		}
@@ -102,7 +100,6 @@ namespace Luny.Godot.Engine.Services
 			if (node == SceneTree.CurrentScene)
 			{
 				CurrentScene = new GodotScene(SceneTree.CurrentScene);
-
 				LunyLogger.LogInfo($"{nameof(OnNativeSceneLoaded)}: {CurrentScene} => {ToString()}", this);
 			}
 		}
@@ -113,7 +110,6 @@ namespace Luny.Godot.Engine.Services
 			if (CurrentScene.NativeScene != SceneTree.CurrentScene)
 			{
 				CurrentScene = null;
-
 				LunyLogger.LogInfo($"{nameof(OnNativeSceneUnloaded)}: {CurrentScene} => {ToString()}", this);
 			}
 		}

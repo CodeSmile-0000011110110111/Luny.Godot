@@ -19,9 +19,5 @@ namespace Luny.Godot.Engine.Services
 			if (sceneTree != null)
 				sceneTree.Paused = true;
 		*/
-
-		protected override void OnServiceInitialize() {}
-		protected override void OnServiceStartup() {}
-		protected override void OnServiceShutdown() {}
 	}
 }

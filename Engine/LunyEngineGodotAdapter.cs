@@ -16,7 +16,7 @@ namespace Luny.Godot.Engine
 		private static ILunyEngineNativeAdapter s_Instance;
 
 		// hold on to LunyEngine reference (not a Node type)
-		private ILunyEngineAdapter _lunyEngine;
+		private ILunyEngineLifecycle _lunyEngine;
 
 		// Instantiated automatically via Globals/Autoload
 		// If it doesn't instantiate, check if LunyScript plugin is enabled.
@@ -27,10 +27,7 @@ namespace Luny.Godot.Engine
 			// Logging comes first, we don't want to miss anything
 			LunyLogger.Logger = new GodotLogger();
 			LunyTraceLogger.LogInfoInitializing(this);
-
-			s_Instance = ILunyEngineNativeAdapter.ValidateAdapterSingletonInstance(s_Instance, this);
-			_lunyEngine = LunyEngine.CreateInstance(this);
-
+			_lunyEngine = ILunyEngineNativeAdapter.CreateEngine(ref s_Instance, this);
 			LunyTraceLogger.LogInfoInitialized(this);
 		}
 
@@ -38,16 +35,16 @@ namespace Luny.Godot.Engine
 		{
 			ILunyEngineNativeAdapter.ThrowIfAdapterNull(s_Instance);
 			ILunyEngineNativeAdapter.ThrowIfLunyEngineNull(_lunyEngine);
-
-			_lunyEngine?.OnEngineStartup(this);
+			ILunyEngineNativeAdapter.Startup(s_Instance, _lunyEngine);
 		}
 
-		public override void _PhysicsProcess(Double delta) => _lunyEngine?.OnEngineFixedStep(delta, this); // => OnFixedStep()
+		public override void _PhysicsProcess(Double delta) =>
+			ILunyEngineNativeAdapter.FixedStep(delta, s_Instance, _lunyEngine); // => OnFixedStep()
 
 		public override void _Process(Double delta) // => OnUpdate() + OnLateUpdate()
 		{
-			_lunyEngine?.OnEngineUpdate(delta, this);
-			_lunyEngine?.OnEngineLateUpdate(delta, this); // emulate "late update"
+			ILunyEngineNativeAdapter.Update(delta, s_Instance, _lunyEngine);
+			ILunyEngineNativeAdapter.LateUpdate(delta, s_Instance, _lunyEngine); // emulate "late update"
 		}
 
 		public override void _Notification(Int32 what) // => OnShutdown()

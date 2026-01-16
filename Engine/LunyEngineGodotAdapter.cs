@@ -39,15 +39,15 @@ namespace Luny.Godot.Engine
 			ILunyEngineNativeAdapter.ThrowIfAdapterNull(s_Instance);
 			ILunyEngineNativeAdapter.ThrowIfLunyEngineNull(_lunyEngine);
 
-			_lunyEngine?.OnEngineStartup();
+			_lunyEngine?.OnEngineStartup(this);
 		}
 
-		public override void _PhysicsProcess(Double delta) => _lunyEngine?.OnEngineFixedStep(delta); // => OnFixedStep()
+		public override void _PhysicsProcess(Double delta) => _lunyEngine?.OnEngineFixedStep(delta, this); // => OnFixedStep()
 
 		public override void _Process(Double delta) // => OnUpdate() + OnLateUpdate()
 		{
-			_lunyEngine?.OnEngineUpdate(delta);
-			_lunyEngine?.OnEngineLateUpdate(delta); // emulate "late update"
+			_lunyEngine?.OnEngineUpdate(delta, this);
+			_lunyEngine?.OnEngineLateUpdate(delta, this); // emulate "late update"
 		}
 
 		public override void _Notification(Int32 what) // => OnShutdown()

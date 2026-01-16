@@ -31,23 +31,23 @@ namespace Luny.Godot.Engine
 			LunyTraceLogger.LogInfoInitialized(this);
 		}
 
-		public override void _Ready() // => OnStartup()
+		public override void _Ready()
 		{
 			ILunyEngineNativeAdapter.ThrowIfAdapterNull(s_Instance);
 			ILunyEngineNativeAdapter.ThrowIfLunyEngineNull(_lunyEngine);
-			ILunyEngineNativeAdapter.Startup(s_Instance, _lunyEngine);
+			ILunyEngineNativeAdapter.Startup(s_Instance, _lunyEngine); // => OnStartup()
 		}
 
 		public override void _PhysicsProcess(Double delta) =>
 			ILunyEngineNativeAdapter.FixedStep(delta, s_Instance, _lunyEngine); // => OnFixedStep()
 
-		public override void _Process(Double delta) // => OnUpdate() + OnLateUpdate()
+		public override void _Process(Double delta)
 		{
-			ILunyEngineNativeAdapter.Update(delta, s_Instance, _lunyEngine);
-			ILunyEngineNativeAdapter.LateUpdate(delta, s_Instance, _lunyEngine); // emulate "late update"
+			ILunyEngineNativeAdapter.Update(delta, s_Instance, _lunyEngine); // => OnUpdate()
+			ILunyEngineNativeAdapter.LateUpdate(delta, s_Instance, _lunyEngine); // => OnLateUpdate()
 		}
 
-		public override void _Notification(Int32 what) // => OnShutdown()
+		public override void _Notification(Int32 what)
 		{
 			switch ((Int64)what)
 			{
@@ -82,7 +82,7 @@ namespace Luny.Godot.Engine
 
 			try
 			{
-				ILunyEngineNativeAdapter.Shutdown(s_Instance, _lunyEngine);
+				ILunyEngineNativeAdapter.Shutdown(s_Instance, _lunyEngine); // => OnShutdown()
 			}
 			catch (Exception ex)
 			{

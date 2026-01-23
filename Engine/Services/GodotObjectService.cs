@@ -9,25 +9,25 @@ namespace Luny.Godot.Engine.Services
 {
 	public sealed class GodotObjectService : LunyObjectServiceBase, ILunyObjectService
 	{
-		protected override ILunyObject OnCreateEmpty(String name)
+		public ILunyObject CreateEmpty(String name)
 		{
 			var node = new Native.Node3D { Name = name };
 			AddNodeToScene(node);
 			return new GodotNode(node);
 		}
 
-		protected override ILunyObject OnCreatePrimitive(PrimitiveType type, String name)
+		public ILunyObject CreatePrimitive(String name, LunyPrimitiveType type)
 		{
 			var meshInstance = new Native.MeshInstance3D { Name = name };
 			meshInstance.Mesh = type switch
 			{
-				PrimitiveType.Cube => new Native.BoxMesh(),
-				PrimitiveType.Sphere => new Native.SphereMesh(),
-				PrimitiveType.Capsule => new Native.CapsuleMesh(),
-				PrimitiveType.Cylinder => new Native.CylinderMesh(),
-				PrimitiveType.Plane => new Native.PlaneMesh(),
-				PrimitiveType.Quad => new Native.QuadMesh(),
-				_ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+				LunyPrimitiveType.Cube => new Native.BoxMesh(),
+				LunyPrimitiveType.Sphere => new Native.SphereMesh(),
+				LunyPrimitiveType.Capsule => new Native.CapsuleMesh(),
+				LunyPrimitiveType.Cylinder => new Native.CylinderMesh(),
+				LunyPrimitiveType.Plane => new Native.PlaneMesh(),
+				LunyPrimitiveType.Quad => new Native.QuadMesh(),
+				var _ => throw new ArgumentOutOfRangeException(nameof(type), type, null),
 			};
 			AddNodeToScene(meshInstance);
 			return new GodotNode(meshInstance);

@@ -16,7 +16,8 @@ namespace Luny.Godot.Engine.Services
 		[NotNull] private static Native.SceneTree SceneTree { get; set; }
 		public void ReloadScene() => throw new NotImplementedException(nameof(ReloadScene));
 
-		public IReadOnlyList<ILunyObject> GetAllObjects()
+		// TODO: obsolete
+		private IReadOnlyList<ILunyObject> GetAllObjects()
 		{
 			var currentScene = SceneTree?.CurrentScene;
 			if (currentScene == null)

@@ -35,8 +35,17 @@ namespace Luny.Godot.Engine.Bridge
 			SetNodeVisible(node, processMode != Native.Node.ProcessModeEnum.Disabled);
 		}
 
-		public GodotNode(Native.Node node)
-			: base(node, (Int64)node.GetInstanceId(), node.ProcessMode != Native.Node.ProcessModeEnum.Disabled, IsNodeVisible(node)) =>
+		public static ILunyObject ToLunyObject(Native.Node node)
+		{
+			var instanceId = (Int64)node.GetInstanceId();
+			if (TryGetCached(instanceId, out var lunyObject))
+				return lunyObject;
+
+			return new GodotNode(nativeObject, instanceId);
+		}
+
+		private GodotNode(Native.Node node, Int64 instanceId)
+			: base(node, instanceId, node.ProcessMode != Native.Node.ProcessModeEnum.Disabled, IsNodeVisible(node)) =>
 			SetProcessModeWhenEnabled(node);
 
 		// if a node starts "Disabled" we set its process mode to "Inherit" when enabling it,

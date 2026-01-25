@@ -16,8 +16,7 @@ namespace Luny.Godot.Engine.Services
 		[NotNull] private static Native.SceneTree SceneTree { get; set; }
 		public void ReloadScene() => throw new NotImplementedException(nameof(ReloadScene));
 
-		// TODO: obsolete
-		private IReadOnlyList<ILunyObject> GetAllObjects()
+		public IReadOnlyList<ILunyObject> GetObjects(IReadOnlyList<String> objectNames)
 		{
 			var currentScene = SceneTree?.CurrentScene;
 			if (currentScene == null)
@@ -28,7 +27,7 @@ namespace Luny.Godot.Engine.Services
 			// Add all nodes recursively starting from root
 			void AddNodeAndChildren(Native.Node node)
 			{
-				allObjects.Add(new GodotNode(node));
+				allObjects.Add(GodotNode.ToLunyObject(node));
 
 				foreach (var child in node.GetChildren())
 					AddNodeAndChildren(child);
@@ -49,7 +48,7 @@ namespace Luny.Godot.Engine.Services
 				return null;
 
 			var foundNode = FindNodeRecursive(currentScene, name);
-			return foundNode != null ? new GodotNode(foundNode) : null;
+			return foundNode != null ? GodotNode.ToLunyObject(foundNode) : null;
 		}
 
 		private Native.Node FindNodeRecursive(Native.Node node, String name)

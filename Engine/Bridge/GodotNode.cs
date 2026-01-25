@@ -41,7 +41,7 @@ namespace Luny.Godot.Engine.Bridge
 			if (TryGetCached(instanceId, out var lunyObject))
 				return lunyObject;
 
-			return new GodotNode(nativeObject, instanceId);
+			return new GodotNode(node, instanceId);
 		}
 
 		private GodotNode(Native.Node node, Int64 instanceId)

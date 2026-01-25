@@ -13,7 +13,7 @@ namespace Luny.Godot.Engine.Services
 		{
 			var node = new Native.Node3D { Name = name };
 			AddNodeToScene(node);
-			return new GodotNode(node);
+			return GodotNode.ToLunyObject(node);
 		}
 
 		public ILunyObject CreatePrimitive(String name, LunyPrimitiveType type)
@@ -30,7 +30,7 @@ namespace Luny.Godot.Engine.Services
 				var _ => throw new ArgumentOutOfRangeException(nameof(type), type, null),
 			};
 			AddNodeToScene(meshInstance);
-			return new GodotNode(meshInstance);
+			return GodotNode.ToLunyObject(meshInstance);
 		}
 
 		private void AddNodeToScene(Native.Node node)

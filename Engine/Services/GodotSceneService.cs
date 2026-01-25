@@ -22,12 +22,12 @@ namespace Luny.Godot.Engine.Services
 			if (currentScene == null)
 				return Array.Empty<ILunyObject>();
 
-			var allObjects = new List<ILunyObject>();
+			var foundObjects = new List<ILunyObject>();
 
 			// Add all nodes recursively starting from root
 			void AddNodeAndChildren(Native.Node node)
 			{
-				allObjects.Add(GodotNode.ToLunyObject(node));
+				foundObjects.Add(GodotNode.ToLunyObject(node));
 
 				foreach (var child in node.GetChildren())
 					AddNodeAndChildren(child);
@@ -35,7 +35,7 @@ namespace Luny.Godot.Engine.Services
 
 			AddNodeAndChildren(currentScene);
 
-			return allObjects;
+			return foundObjects.AsReadOnly();
 		}
 
 		public ILunyObject FindObjectByName(String name)

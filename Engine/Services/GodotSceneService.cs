@@ -4,6 +4,7 @@ using Luny.Godot.Engine.Bridge;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Native = Godot;
 
 namespace Luny.Godot.Engine.Services
@@ -16,7 +17,7 @@ namespace Luny.Godot.Engine.Services
 		[NotNull] private static Native.SceneTree SceneTree { get; set; }
 		public void ReloadScene() => throw new NotImplementedException(nameof(ReloadScene));
 
-		public IReadOnlyList<ILunyObject> GetObjects(IReadOnlyList<String> objectNames)
+		public IReadOnlyList<ILunyObject> GetObjects(IReadOnlyCollection<String> objectNames)
 		{
 			var currentScene = SceneTree?.CurrentScene;
 			if (currentScene == null)
@@ -27,7 +28,8 @@ namespace Luny.Godot.Engine.Services
 			// Add all nodes recursively starting from root
 			void AddNodeAndChildren(Native.Node node)
 			{
-				foundObjects.Add(GodotNode.ToLunyObject(node));
+				if (objectNames.Contains<String>(node.Name))
+					foundObjects.Add(GodotNode.ToLunyObject(node));
 
 				foreach (var child in node.GetChildren())
 					AddNodeAndChildren(child);

@@ -12,6 +12,8 @@ namespace Luny.Godot.Engine
 	/// </remarks>
 	internal sealed partial class LunyEngineGodotAdapter : Node, ILunyEngineNativeAdapter
 	{
+		public String EngineName => "Godot";
+
 		// intentionally remains private - user code must use LunyEngine.Instance!
 		private static ILunyEngineNativeAdapter s_Instance;
 

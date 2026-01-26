@@ -10,6 +10,6 @@ namespace Luny.Godot.Engine.Bridge
 		public override String Name => _name ??= System.IO.Path.GetFileNameWithoutExtension(((Node)NativeScene)?.SceneFilePath);
 
 		public GodotScene(Node nativeScene)
-			: base(nativeScene, new GodotPath(nativeScene.SceneFilePath)) {}
+			: base(nativeScene, nativeScene != null ? new GodotPath(nativeScene.SceneFilePath) : null) {}
 	}
 }

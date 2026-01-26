@@ -18,9 +18,11 @@ namespace Luny.Godot.Engine
 		// hold on to LunyEngine reference (not a Node type)
 		private ILunyEngineLifecycle _lunyEngine;
 
+		internal static void ForceReset_UnitTestsOnly() => s_Instance = null;
+
 		// Instantiated automatically via Globals/Autoload
 		// If it doesn't instantiate, check if LunyScript plugin is enabled.
-		private LunyEngineGodotAdapter() => Initialize();
+		internal LunyEngineGodotAdapter() => Initialize();
 
 		private void Initialize()
 		{

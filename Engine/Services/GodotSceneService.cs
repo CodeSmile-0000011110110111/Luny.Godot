@@ -15,7 +15,7 @@ namespace Luny.Godot.Engine.Services
 	public sealed class GodotSceneService : LunySceneServiceBase, ILunySceneService
 	{
 		[NotNull] private static Native.SceneTree SceneTree { get; set; }
-		public void ReloadScene() => throw new NotImplementedException(nameof(ReloadScene));
+		public void ReloadScene() => SceneTree?.ReloadCurrentScene();
 
 		public IReadOnlyList<ILunyObject> GetObjects(IReadOnlyCollection<String> objectNames)
 		{
@@ -79,10 +79,12 @@ namespace Luny.Godot.Engine.Services
 
 		protected override void OnServiceStartup()
 		{
-			CurrentScene = new GodotScene(SceneTree.CurrentScene);
-			LunyLogger.LogInfo($"{nameof(OnServiceInitialize)}: CurrentScene={CurrentScene}", this);
-
-			InvokeOnSceneLoaded(CurrentScene);
+			if (SceneTree?.CurrentScene != null)
+			{
+				CurrentScene = new GodotScene(SceneTree.CurrentScene);
+				LunyLogger.LogInfo($"{nameof(OnServiceStartup)}: CurrentScene={CurrentScene}", this);
+				InvokeOnSceneLoaded(CurrentScene);
+			}
 		}
 
 		protected override void OnServiceShutdown()
@@ -97,9 +99,10 @@ namespace Luny.Godot.Engine.Services
 		private void OnNativeSceneUnloaded(Native.Node node)
 		{
 			// Note: When NodeRemoved fires, GetTree().CurrentScene is the new scene (or null).
-			if (CurrentScene.NativeScene != SceneTree.CurrentScene)
+			if (CurrentScene != null && CurrentScene.NativeScene != SceneTree.CurrentScene)
 			{
 				LunyTraceLogger.LogTrace($"{nameof(OnNativeSceneUnloaded)}: {CurrentScene} => {ToString()}", this);
+				InvokeOnSceneUnloaded(CurrentScene);
 				CurrentScene = null;
 			}
 		}
@@ -110,6 +113,7 @@ namespace Luny.Godot.Engine.Services
 			{
 				CurrentScene = new GodotScene(SceneTree.CurrentScene);
 				LunyTraceLogger.LogTrace($"{nameof(OnNativeSceneLoaded)}: {CurrentScene} => {ToString()}", this);
+				InvokeOnSceneLoaded(CurrentScene);
 			}
 		}
 	}

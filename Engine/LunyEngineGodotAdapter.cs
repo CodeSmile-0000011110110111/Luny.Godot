@@ -42,8 +42,10 @@ namespace Luny.Godot.Engine
 			ILunyEngineNativeAdapter.Startup(s_Instance, _lunyEngine); // => OnStartup()
 		}
 
-		public override void _PhysicsProcess(Double delta) =>
+		public override void _PhysicsProcess(Double delta)
+		{
 			ILunyEngineNativeAdapter.FixedStep(delta, s_Instance, _lunyEngine); // => OnFixedStep()
+		}
 
 		public override void _Process(Double delta)
 		{

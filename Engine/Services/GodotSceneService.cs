@@ -79,12 +79,9 @@ namespace Luny.Godot.Engine.Services
 
 		protected override void OnServiceStartup()
 		{
-			if (SceneTree?.CurrentScene != null)
-			{
-				CurrentScene = new GodotScene(SceneTree.CurrentScene);
-				LunyLogger.LogInfo($"{nameof(OnServiceStartup)}: CurrentScene={CurrentScene}", this);
-				InvokeOnSceneLoaded(CurrentScene);
-			}
+			CurrentScene = new GodotScene(SceneTree.CurrentScene);
+			LunyLogger.LogInfo($"{nameof(OnServiceStartup)}: CurrentScene={CurrentScene}", this);
+			InvokeOnSceneLoaded(CurrentScene);
 		}
 
 		protected override void OnServiceShutdown()

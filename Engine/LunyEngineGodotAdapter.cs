@@ -10,17 +10,14 @@ namespace Luny.Godot.Engine
 	/// <remarks>
 	/// Gets instantiated as autoload singleton, automatically added by plugin.gd.
 	/// </remarks>
-	internal sealed partial class LunyEngineGodotAdapter : Node, ILunyEngineNativeAdapter
+	internal sealed class LunyEngineGodotAdapter : Node, ILunyEngineNativeAdapter, ILunyEngineNativeAdapterInternal
 	{
-		public String EngineName => "Godot";
-
 		// intentionally remains private - user code must use LunyEngine.Instance!
 		private static ILunyEngineNativeAdapter s_Instance;
 
 		// hold on to LunyEngine reference (not a Node type)
 		private ILunyEngineLifecycle _lunyEngine;
-
-		internal static void ForceReset_UnitTestsOnly() => s_Instance = null;
+		public NativeEngine Engine => NativeEngine.Godot;
 
 		// Instantiated automatically via Globals/Autoload
 		// If it doesn't instantiate, check if LunyScript plugin is enabled.
@@ -35,6 +32,8 @@ namespace Luny.Godot.Engine
 			LunyTraceLogger.LogInfoInitialized(this);
 		}
 
+		public void SimulateQuit_UnitTestOnly() => _Notification(NotificationWMCloseRequest);
+
 		public override void _Ready()
 		{
 			ILunyEngineNativeAdapter.ThrowIfAdapterNull(s_Instance);
@@ -42,10 +41,8 @@ namespace Luny.Godot.Engine
 			ILunyEngineNativeAdapter.Startup(s_Instance, _lunyEngine); // => OnStartup()
 		}
 
-		public override void _PhysicsProcess(Double delta)
-		{
+		public override void _PhysicsProcess(Double delta) =>
 			ILunyEngineNativeAdapter.FixedStep(delta, s_Instance, _lunyEngine); // => OnFixedStep()
-		}
 
 		public override void _Process(Double delta)
 		{
@@ -55,7 +52,7 @@ namespace Luny.Godot.Engine
 
 		public override void _Notification(Int32 what)
 		{
-			switch ((Int64)what)
+			switch (what)
 			{
 				case NotificationCrash:
 				case NotificationWMCloseRequest:

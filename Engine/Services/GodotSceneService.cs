@@ -73,43 +73,51 @@ namespace Luny.Godot.Engine.Services
 			SceneTree = (Native.SceneTree)Native.Engine.GetMainLoop();
 
 			// Connect signals using the Godot += syntax
-			SceneTree.NodeAdded += OnNativeSceneLoaded;
-			SceneTree.NodeRemoved += OnNativeSceneUnloaded;
+			SceneTree.NodeAdded += OnNodeAdded;
+			SceneTree.NodeRemoved += OnNodeRemoved;
 		}
 
 		protected override void OnServiceStartup()
 		{
-			CurrentScene = new GodotScene(SceneTree.CurrentScene);
-			LunyLogger.LogInfo($"{nameof(OnServiceStartup)}: CurrentScene={CurrentScene}", this);
-			InvokeOnSceneLoaded(CurrentScene);
+			if (SceneTree.CurrentScene != null)
+			{
+				CurrentScene = new GodotScene(SceneTree.CurrentScene);
+				LunyLogger.LogInfo($"{nameof(OnServiceStartup)}: CurrentScene={CurrentScene}", this);
+				InvokeOnSceneLoaded(CurrentScene);
+			}
+			else
+			{
+				LunyLogger.LogWarning($"{nameof(OnServiceStartup)}: SceneTree.CurrentScene is NULL!", this);
+			}
 		}
 
 		protected override void OnServiceShutdown()
 		{
 			// Disconnect signals
-			SceneTree.NodeAdded -= OnNativeSceneLoaded;
-			SceneTree.NodeRemoved -= OnNativeSceneUnloaded;
+			SceneTree.NodeAdded -= OnNodeAdded;
+			SceneTree.NodeRemoved -= OnNodeRemoved;
 			CurrentScene = null;
 			SceneTree = null;
 		}
 
-		private void OnNativeSceneUnloaded(Native.Node node)
+		private void OnNodeRemoved(Native.Node node)
 		{
 			// Note: When NodeRemoved fires, GetTree().CurrentScene is the new scene (or null).
 			if (CurrentScene != null && CurrentScene.NativeScene != SceneTree.CurrentScene)
 			{
-				LunyTraceLogger.LogTrace($"{nameof(OnNativeSceneUnloaded)}: {CurrentScene} => {ToString()}", this);
+				LunyTraceLogger.LogTrace($"{nameof(OnNodeRemoved)}: {CurrentScene} => {ToString()}", this);
 				InvokeOnSceneUnloaded(CurrentScene);
 				CurrentScene = null;
 			}
 		}
 
-		private void OnNativeSceneLoaded(Native.Node node)
+		private void OnNodeAdded(Native.Node node)
 		{
+			LunyLogger.LogInfo($"{nameof(OnNodeAdded)}: node={node.Name}, CurrentScene={SceneTree.CurrentScene?.Name}", this);
 			if (node == SceneTree.CurrentScene)
 			{
 				CurrentScene = new GodotScene(SceneTree.CurrentScene);
-				LunyTraceLogger.LogTrace($"{nameof(OnNativeSceneLoaded)}: {CurrentScene} => {ToString()}", this);
+				LunyLogger.LogInfo($"{nameof(OnNodeAdded)}: {CurrentScene} => {ToString()}", this);
 				InvokeOnSceneLoaded(CurrentScene);
 			}
 		}

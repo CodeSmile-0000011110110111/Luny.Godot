@@ -35,7 +35,7 @@ namespace Luny.Godot.Engine.Services
 
 		private void AddNodeToScene(Native.Node node)
 		{
-			var sceneTree = (Native.SceneTree)Native.Engine.GetMainLoop();
+			var sceneTree = Native.Engine.GetMainLoop();
 			if (sceneTree == null)
 			{
 				LunyLogger.LogError($"can't add node {node}: SceneTree is null", this);

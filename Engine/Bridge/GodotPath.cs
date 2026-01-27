@@ -12,9 +12,7 @@ namespace Luny.Godot.Engine.Bridge
 
 		// Godot paths must remove their prefix
 		// TODO: cache substring upon use
-		protected override String ToEngineAgnosticPath(String nativePath)
-		{
-			return nativePath.StartsWith("res://") ? nativePath.Substring("res://".Length) : nativePath;
-		}
+		protected override String ToEngineAgnosticPath(String nativePath) =>
+			nativePath.StartsWith("res://") ? nativePath.Substring("res://".Length) : nativePath;
 	}
 }

@@ -13,6 +13,15 @@ namespace Luny.Godot.Engine.Bridge
 		private Native.Node.ProcessModeEnum _processModeWhenEnabled;
 		private Native.Node Node => Cast<Native.Node>();
 
+		public static ILunyObject ToLunyObject(Native.Node node)
+		{
+			var instanceId = (Int64)node.GetInstanceId();
+			if (TryGetCached(instanceId, out var lunyObject))
+				return lunyObject;
+
+			return new GodotNode(node, instanceId);
+		}
+
 		private static Boolean IsNodeVisible(Native.Node node) => node switch
 		{
 			Native.Node3D n3d => n3d.Visible,
@@ -33,15 +42,6 @@ namespace Luny.Godot.Engine.Bridge
 		{
 			node.ProcessMode = processMode;
 			SetNodeVisible(node, processMode != Native.Node.ProcessModeEnum.Disabled);
-		}
-
-		public static ILunyObject ToLunyObject(Native.Node node)
-		{
-			var instanceId = (Int64)node.GetInstanceId();
-			if (TryGetCached(instanceId, out var lunyObject))
-				return lunyObject;
-
-			return new GodotNode(node, instanceId);
 		}
 
 		private GodotNode(Native.Node node, Int64 instanceId)

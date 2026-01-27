@@ -28,7 +28,7 @@ namespace Luny.Godot.Engine.Services
 			// Add all nodes recursively starting from root
 			void AddNodeAndChildren(Native.Node node)
 			{
-				if (objectNames.Contains<String>(node.Name))
+				if (objectNames.Contains(node.Name))
 					foundObjects.Add(GodotNode.ToLunyObject(node));
 
 				foreach (var child in node.GetChildren())
@@ -70,7 +70,7 @@ namespace Luny.Godot.Engine.Services
 
 		protected override void OnServiceInitialize()
 		{
-			SceneTree = (Native.SceneTree)Native.Engine.GetMainLoop();
+			SceneTree = Native.Engine.GetMainLoop();
 
 			// Connect signals using the Godot += syntax
 			SceneTree.NodeAdded += OnNodeAdded;
@@ -86,9 +86,7 @@ namespace Luny.Godot.Engine.Services
 				InvokeOnSceneLoaded(CurrentScene);
 			}
 			else
-			{
 				LunyLogger.LogWarning($"{nameof(OnServiceStartup)}: SceneTree.CurrentScene is NULL!", this);
-			}
 		}
 
 		protected override void OnServiceShutdown()

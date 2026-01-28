@@ -32,7 +32,7 @@ namespace Luny.Godot.Engine
 			LunyTraceLogger.LogInfoInitialized(this);
 		}
 
-		public void SimulateQuit_UnitTestOnly() => _Notification((Int32)NotificationWMCloseRequest);
+		public void SimulateQuit_UnitTestOnly() => _Notification(NotificationWMCloseRequest);
 
 		public override void _Ready()
 		{
@@ -52,7 +52,7 @@ namespace Luny.Godot.Engine
 
 		public override void _Notification(Int32 what)
 		{
-			switch ((Int64)what)
+			switch (what)
 			{
 				case NotificationCrash:
 				case NotificationWMCloseRequest:

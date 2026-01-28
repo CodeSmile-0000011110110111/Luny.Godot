@@ -10,7 +10,7 @@ namespace Luny.Godot.Engine
 	/// <remarks>
 	/// Gets instantiated as autoload singleton, automatically added by plugin.gd.
 	/// </remarks>
-	internal sealed class LunyEngineGodotAdapter : Node, ILunyEngineNativeAdapter, ILunyEngineNativeAdapterInternal
+	internal sealed partial class LunyEngineGodotAdapter : Node, ILunyEngineNativeAdapter, ILunyEngineNativeAdapterInternal
 	{
 		// intentionally remains private - user code must use LunyEngine.Instance!
 		private static ILunyEngineNativeAdapter s_Instance;
@@ -32,7 +32,7 @@ namespace Luny.Godot.Engine
 			LunyTraceLogger.LogInfoInitialized(this);
 		}
 
-		public void SimulateQuit_UnitTestOnly() => _Notification(NotificationWMCloseRequest);
+		public void SimulateQuit_UnitTestOnly() => _Notification((Int32)NotificationWMCloseRequest);
 
 		public override void _Ready()
 		{
@@ -52,7 +52,7 @@ namespace Luny.Godot.Engine
 
 		public override void _Notification(Int32 what)
 		{
-			switch (what)
+			switch ((Int64)what)
 			{
 				case NotificationCrash:
 				case NotificationWMCloseRequest:
@@ -100,4 +100,7 @@ namespace Luny.Godot.Engine
 			}
 		}
 	}
+
+	// stub to ensure 'partial' keyword isn't removed by "Code Cleanup" runs
+	internal sealed partial class LunyEngineGodotAdapter {}
 }

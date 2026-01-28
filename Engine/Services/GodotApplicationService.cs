@@ -15,9 +15,9 @@ namespace Luny.Godot.Engine.Services
 
 		public void Quit(Int32 exitCode = 0)
 		{
-			var tree = Native.Engine.GetMainLoop();
+			var tree = (Native.SceneTree)Native.Engine.GetMainLoop();
 			// play nice since Godot doesn't post the close request notification by itself
-			tree.Root.PropagateNotification(Native.Node.NotificationWMCloseRequest);
+			tree.Root.PropagateNotification((Int32)Native.Node.NotificationWMCloseRequest);
 			// prefer deferred call - we don't know when and where user may call it
 			tree.CallDeferred("quit", exitCode);
 		}

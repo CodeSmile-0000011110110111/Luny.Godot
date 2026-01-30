@@ -49,5 +49,8 @@ namespace Luny.Godot.Engine.Services
 
 			sceneTree.CurrentScene.AddChild(node);
 		}
+
+		public ILunyObject CreateFromPrefab(ILunyPrefab prefab) =>
+			throw new NotImplementedException($"{nameof(GodotObjectService)}.{nameof(CreateFromPrefab)}");
 	}
 }

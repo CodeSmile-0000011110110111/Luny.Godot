@@ -1,6 +1,8 @@
 using Godot;
 using Luny.Engine;
+using Luny.Engine.Bridge;
 using Luny.Engine.Bridge.Enums;
+using Luny.Godot.Engine.Bridge;
 using System;
 
 namespace Luny.Godot.Engine
@@ -28,6 +30,7 @@ namespace Luny.Godot.Engine
 		{
 			// Logging comes first, we don't want to miss anything
 			LunyLogger.Logger = new GodotLogger();
+			LunyPath.Converter = new GodotPathConverter();
 			LunyTraceLogger.LogInfoInitializing(this);
 			_lunyEngine = ILunyEngineNativeAdapter.CreateEngine(ref s_Instance, this);
 			LunyTraceLogger.LogInfoInitialized(this);

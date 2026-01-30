@@ -17,6 +17,9 @@ namespace Luny.Godot.Engine.Bridge
 		{
 			_packedScene = packedScene ?? throw new ArgumentNullException(nameof(packedScene));
 			AssetPath = assetPath ?? throw new ArgumentNullException(nameof(assetPath));
+
+			if (!_packedScene.CanInstantiate())
+				throw new ArgumentException($"PackedScene {assetPath} is not instantiable", nameof(packedScene));
 		}
 
 		public T Cast<T>() where T : class => _packedScene as T;

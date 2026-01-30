@@ -1,6 +1,5 @@
 using Godot;
 using Luny.Engine.Bridge;
-using Luny.Engine.Bridge.Identity;
 using Luny.Engine.Services;
 using Luny.Godot.Engine.Bridge;
 using System;
@@ -18,9 +17,7 @@ namespace Luny.Godot.Engine.Services
 				return null;
 
 			if (typeof(T) == typeof(ILunyPrefab) && resource is PackedScene packedScene)
-			{
 				return new GodotPrefab(packedScene, path) as T;
-			}
 
 			// Add more types as needed (Mesh, Scene, etc.)
 			return null;
@@ -46,6 +43,7 @@ namespace Luny.Godot.Engine.Services
 				// In a real implementation, we'd load a "MissingPrefab" from a known Luny location.
 				// For now, we'll return a GodotPrefab wrapping an empty PackedScene or similar.
 				var scene = new PackedScene();
+				scene.Pack(new MeshInstance3D { Name = $"Missing '{path}'", Mesh = new BoxMesh() });
 				return new GodotPrefab(scene, path) as T;
 			}
 			return null;

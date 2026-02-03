@@ -1,0 +1,6 @@
+[submodule "GDSharp"]
+	path = GDSharp
+	url = https://github.com/CodeSmile-0000011110110111/GDSharp
+	branch = .
+	update = merge
+	

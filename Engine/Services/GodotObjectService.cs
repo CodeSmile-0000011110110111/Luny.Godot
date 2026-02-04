@@ -33,6 +33,16 @@ namespace Luny.Godot.Engine.Services
 			return GodotNode.ToLunyObject(meshInstance);
 		}
 
+		public ILunyObject CreateFromPrefab(ILunyPrefab prefab)
+		{
+			if (prefab is not GodotPrefab godotPrefab)
+				throw new ArgumentException($"Prefab must be of type {nameof(GodotPrefab)}", nameof(prefab));
+
+			var node = godotPrefab.Instantiate();
+			AddNodeToScene(node);
+			return GodotNode.ToLunyObject(node);
+		}
+
 		private void AddNodeToScene(Native.Node node)
 		{
 			var sceneTree = (Native.SceneTree)Native.Engine.GetMainLoop();
@@ -48,16 +58,6 @@ namespace Luny.Godot.Engine.Services
 			}
 
 			sceneTree.CurrentScene.AddChild(node);
-		}
-
-		public ILunyObject CreateFromPrefab(ILunyPrefab prefab)
-		{
-			if (prefab is not GodotPrefab godotPrefab)
-				throw new ArgumentException($"Prefab must be of type {nameof(GodotPrefab)}", nameof(prefab));
-
-			var node = godotPrefab.Instantiate();
-			AddNodeToScene(node);
-			return GodotNode.ToLunyObject(node);
 		}
 	}
 }

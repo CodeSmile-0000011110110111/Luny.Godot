@@ -29,7 +29,7 @@ namespace Luny.Godot.Engine.Bridge
 			return type switch
 			{
 				LunyPathType.Save => UserPrefix + agnosticPath,
-				_ => ResPrefix + agnosticPath
+				var _ => ResPrefix + agnosticPath,
 			};
 		}
 	}

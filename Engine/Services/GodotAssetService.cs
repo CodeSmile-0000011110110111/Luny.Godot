@@ -9,7 +9,7 @@ namespace Luny.Godot.Engine.Services
 {
 	public sealed class GodotAssetService : LunyAssetServiceBase
 	{
-		protected override T LoadNative<T>(LunyAssetPath path)
+		protected override T LoadAsset<T>(LunyAssetPath path)
 		{
 			var nativePath = path.NativePath;
 			var resource = ResourceLoader.Load(nativePath);
@@ -23,7 +23,7 @@ namespace Luny.Godot.Engine.Services
 			return null;
 		}
 
-		protected override void UnloadNative(ILunyAsset asset)
+		protected override void UnloadAsset(ILunyAsset asset)
 		{
 			// Godot uses ref counting for Resources, no explicit unload usually needed for simple mocks.
 			// In real engine, we might do nothing or call something specific if needed.

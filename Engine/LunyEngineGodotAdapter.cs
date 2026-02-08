@@ -45,13 +45,13 @@ namespace Luny.Godot.Engine
 			ILunyEngineNativeAdapter.Startup(s_Instance, _lunyEngine); // => OnStartup()
 		}
 
-		public override void _PhysicsProcess(Double delta) =>
-			ILunyEngineNativeAdapter.FixedStep(delta, s_Instance, _lunyEngine); // => OnFixedStep()
+		public override void _PhysicsProcess(Double deltaTime) =>
+			ILunyEngineNativeAdapter.Heartbeat(deltaTime, s_Instance, _lunyEngine); // => OnFixedStep()
 
-		public override void _Process(Double delta)
+		public override void _Process(Double deltaTime)
 		{
-			ILunyEngineNativeAdapter.Update(delta, s_Instance, _lunyEngine); // => OnUpdate()
-			ILunyEngineNativeAdapter.LateUpdate(delta, s_Instance, _lunyEngine); // => OnLateUpdate()
+			ILunyEngineNativeAdapter.FrameUpdate(deltaTime, s_Instance, _lunyEngine); // => OnUpdate()
+			ILunyEngineNativeAdapter.FrameLateUpdate(s_Instance, _lunyEngine); // => OnLateUpdate()
 		}
 
 		public override void _Notification(Int32 what)

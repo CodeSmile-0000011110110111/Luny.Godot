@@ -9,14 +9,14 @@ namespace Luny.Godot.Engine.Services
 {
 	public sealed class GodotObjectService : LunyObjectServiceBase, ILunyObjectService
 	{
-		public ILunyObject CreateEmpty(String name)
+		public override ILunyObject CreateEmpty(String name)
 		{
 			var node = new Native.Node3D { Name = name };
 			AddNodeToScene(node);
 			return GodotNode.ToLunyObject(node);
 		}
 
-		public ILunyObject CreatePrimitive(String name, LunyPrimitiveType type)
+		public override ILunyObject CreatePrimitive(String name, LunyPrimitiveType type)
 		{
 			var meshInstance = new Native.MeshInstance3D { Name = name };
 			meshInstance.Mesh = type switch
@@ -33,7 +33,7 @@ namespace Luny.Godot.Engine.Services
 			return GodotNode.ToLunyObject(meshInstance);
 		}
 
-		public ILunyObject CreateFromPrefab(ILunyPrefab prefab)
+		public override ILunyObject CreateFromPrefab(ILunyPrefab prefab)
 		{
 			if (prefab is not GodotPrefab godotPrefab)
 				throw new ArgumentException($"Prefab must be of type {nameof(GodotPrefab)}", nameof(prefab));

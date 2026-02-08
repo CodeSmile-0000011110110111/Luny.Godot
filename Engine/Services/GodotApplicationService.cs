@@ -9,11 +9,11 @@ namespace Luny.Godot.Engine.Services
 	/// </summary>
 	public sealed class GodotApplicationService : LunyApplicationServiceBase, ILunyApplicationService
 	{
-		public Boolean IsEditor => Native.Engine.IsEditorHint();
+		public override Boolean IsEditor => Native.Engine.IsEditorHint();
 
-		public Boolean IsPlaying => !Native.Engine.IsEditorHint();
+		public override Boolean IsPlaying => !Native.Engine.IsEditorHint();
 
-		public void Quit(Int32 exitCode = 0)
+		public override void Quit(Int32 exitCode = 0)
 		{
 			var tree = (Native.SceneTree)Native.Engine.GetMainLoop();
 			// play nice since Godot doesn't post the close request notification by itself

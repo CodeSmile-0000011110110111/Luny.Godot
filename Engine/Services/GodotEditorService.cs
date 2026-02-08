@@ -11,7 +11,7 @@ namespace Luny.Godot.Engine.Services
 		/// <summary>
 		/// Caution: Falls back to Debugger.Break() because Godot doesn't support player pause/resume via script.
 		/// </summary>
-		public void PausePlayer() => Debugger.Break();
+		public override void PausePlayer() => Debugger.Break();
 
 		/*
 			// Pausing the SceneTree works but it cannot be unpaused via Editor UI.

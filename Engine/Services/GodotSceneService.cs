@@ -15,9 +15,9 @@ namespace Luny.Godot.Engine.Services
 	public sealed class GodotSceneService : LunySceneServiceBase, ILunySceneService
 	{
 		[NotNull] private static Native.SceneTree SceneTree { get; set; }
-		public void ReloadScene() => SceneTree?.ReloadCurrentScene();
+		public override void ReloadScene() => SceneTree?.ReloadCurrentScene();
 
-		public IReadOnlyList<ILunyObject> GetObjects(IReadOnlyCollection<String> objectNames)
+		public override IReadOnlyList<ILunyObject> GetObjects(IReadOnlyCollection<String> objectNames)
 		{
 			var currentScene = SceneTree?.CurrentScene;
 			if (currentScene == null)
@@ -40,7 +40,7 @@ namespace Luny.Godot.Engine.Services
 			return foundObjects.AsReadOnly();
 		}
 
-		public ILunyObject FindObjectByName(String name)
+		public override ILunyObject FindObjectByName(String name)
 		{
 			if (String.IsNullOrEmpty(name))
 				return null;

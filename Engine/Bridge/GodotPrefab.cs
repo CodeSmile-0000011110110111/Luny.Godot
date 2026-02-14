@@ -1,6 +1,5 @@
 using Godot;
 using Luny.Engine.Bridge;
-using Luny.Engine.Bridge.Identity;
 using System;
 
 namespace Luny.Godot.Engine.Bridge

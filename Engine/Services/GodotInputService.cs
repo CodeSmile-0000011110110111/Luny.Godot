@@ -14,7 +14,7 @@ namespace Luny.Godot.Engine.Services
 		/// Simulates axis input for testing. In real Godot, this would come from _UnhandledInput.
 		/// </summary>
 		public void SimulateAxisInput(String actionName, LunyVector2 value) =>
-			RaiseAxisInput(actionName, value);
+			RaiseDirectionalInput(actionName, value);
 
 		/// <summary>
 		/// Simulates button press for testing. In real Godot, this would come from _UnhandledInput.

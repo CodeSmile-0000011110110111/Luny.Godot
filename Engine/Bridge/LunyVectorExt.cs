@@ -1,4 +1,6 @@
-namespace Luny.Godot
+using Luny.Engine.Bridge;
+
+namespace Luny.Godot.Engine.Bridge
 {
 	public static class LunyVectorExt
 	{

@@ -77,6 +77,8 @@ namespace Luny.Godot.Engine.Bridge
 			_processModeWhenEnabled = processMode == Native.Node.ProcessModeEnum.Disabled ? Native.Node.ProcessModeEnum.Inherit : processMode;
 		}
 
+		protected override LunyTransform GetNativeTransform() => throw new NotImplementedException(nameof(GetNativeTransform));
+
 		protected override void DestroyNativeObject()
 		{
 			var node = Node;

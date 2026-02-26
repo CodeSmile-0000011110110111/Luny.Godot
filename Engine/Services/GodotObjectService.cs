@@ -8,15 +8,20 @@ namespace Luny.Godot.Engine.Services
 {
 	public sealed class GodotObjectService : LunyObjectServiceBase, ILunyObjectService
 	{
-		public override ILunyObject CreateEmpty(String name)
+		public override ILunyObject CreateEmpty(String name, ILunyObject parent, LunyVector3 position, LunyQuaternion rotation,
+			LunyVector3 scale)
 		{
+			throw new NotImplementedException($"{nameof(CreateEmpty)}, params: parent, etc");
 			var node = new Native.Node3D { Name = name };
 			AddNodeToScene(node);
 			return GodotNode.ToLunyObject(node);
 		}
 
-		public override ILunyObject CreatePrimitive(String name, LunyPrimitiveType type)
+		public override ILunyObject CreatePrimitive(String name, LunyPrimitiveType type, ILunyObject parent, LunyVector3 position, LunyQuaternion rotation,
+			LunyVector3 scale)
 		{
+			throw new NotImplementedException($"{nameof(CreatePrimitive)}, params: parent, etc");
+
 			var meshInstance = new Native.MeshInstance3D { Name = name };
 			meshInstance.Mesh = type switch
 			{
@@ -32,8 +37,10 @@ namespace Luny.Godot.Engine.Services
 			return GodotNode.ToLunyObject(meshInstance);
 		}
 
-		public override ILunyObject CreateFromPrefab(ILunyPrefab prefab)
+		public override ILunyObject CreateFromPrefab(ILunyPrefab prefab, ILunyObject parent, LunyVector3 position, LunyQuaternion rotation, LunyVector3 scale)
 		{
+			throw new NotImplementedException($"{nameof(CreateFromPrefab)}, params: parent, etc");
+
 			if (prefab is not GodotPrefab godotPrefab)
 				throw new ArgumentException($"Prefab must be of type {nameof(GodotPrefab)}", nameof(prefab));
 

@@ -9,6 +9,7 @@ namespace Luny.Godot.Engine.Bridge
 	{
 		private readonly Native.Node3D _node;
 
+		public override Object NativeObject => _node;
 		public override LunyVector3 Position
 		{
 			get => throw new NotImplementedException($"{nameof(GodotTransform)}.{nameof(Position)}");
